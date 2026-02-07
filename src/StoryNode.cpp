@@ -1,26 +1,26 @@
 #include "StoryNode.h"
 #include "Choice.h"
-#include <algorithm>
+#include <iostream>
 
-StoryNode::StoryNode(int id, const std::string& t, const std::string& text, Story* parent)
-    : nodeId(id), title(t), narrativeText(text), parentStory(parent) {
+StoryNode::StoryNode(int id, const std::string& title,
+                     const std::string& text,
+                     Story* parent)
+    : nodeId(id), title(title), narrativeText(text), parentStory(parent) {}
+
+int StoryNode::getNodeId() const {
+    return nodeId;
 }
 
-int StoryNode::getNodeId() const { return nodeId; }
-std::string StoryNode::getTitle() const { return title; }
-void StoryNode::setTitle(const std::string& t) { title = t; }
-std::string StoryNode::getNarrativeText() const { return narrativeText; }
-void StoryNode::setNarrativeText(const std::string& text) { narrativeText = text; }
-Story* StoryNode::getParentStory() const { return parentStory; }
+std::string StoryNode::getTitle() const {
+    return title;
+}
+
+std::string StoryNode::getNarrativeText() const {
+    return narrativeText;
+}
 
 void StoryNode::addChoice(Choice* choice) {
-    if (choice) choices.push_back(choice);
-}
-
-void StoryNode::removeChoice(int choiceId) {
-    choices.erase(std::remove_if(choices.begin(), choices.end(),
-        [choiceId](Choice* c) { return c->getChoiceId() == choiceId; }),
-        choices.end());
+    choices.push_back(choice);
 }
 
 std::vector<Choice*> StoryNode::getChoices() const {
@@ -28,10 +28,20 @@ std::vector<Choice*> StoryNode::getChoices() const {
 }
 
 StoryNode* StoryNode::getNextNode(int choiceId) {
-    for (auto* c : choices) {
+    for (Choice* c : choices) {
         if (c->getChoiceId() == choiceId) {
             return c->getNextNode();
         }
     }
     return nullptr;
+}
+
+void StoryNode::display() const {
+    std::cout << "\n=== " << title << " ===\n";
+    std::cout << narrativeText << "\n\n";
+
+    for (Choice* c : choices) {
+        std::cout << c->getChoiceId()
+                  << ". " << c->getText() << "\n";
+    }
 }

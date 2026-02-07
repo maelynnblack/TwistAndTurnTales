@@ -1,77 +1,58 @@
 #include <iostream>
-#include "Author.h"
-#include "Story.h"
 #include "StoryNode.h"
 #include "Choice.h"
-#include "Version.h"
 
 int main() {
-    // Create an Author
-    Author* author = new Author(1, "Maelynn Black", "maelynn@example.com", "Writer");
+    StoryNode* start = new StoryNode(
+        1,
+        "The Beginning",
+        "You wake up in a dark forest. Two paths lie ahead.",
+        nullptr
+    );
 
-    // Create a Story
-    Story* story = author->createStory("The Dark Forest Adventure");
+    StoryNode* village = new StoryNode(
+        2,
+        "Quiet Village",
+        "You reach a peaceful village. You are safe.",
+        nullptr
+    );
 
-    // Create StoryNodes
-    StoryNode* node1 = new StoryNode(101, "Start", "You wake up in a dark forest.", story);
-    StoryNode* node2 = new StoryNode(102, "Left Path", "You take the left path and hear a river.", story);
-    StoryNode* node3 = new StoryNode(103, "Right Path", "You take the right path and see a cave.", story);
+    StoryNode* dragon = new StoryNode(
+        3,
+        "Dragon's Lair",
+        "A dragon appears. Your journey ends here.",
+        nullptr
+    );
 
-    // Add nodes to Story
-    story->addNode(node1);
-    story->addNode(node2);
-    story->addNode(node3);
+    start->addChoice(new Choice(1, "Take the left path", village));
+    start->addChoice(new Choice(2, "Take the right path", dragon));
 
-    // Create Choices for branching
-    Choice* choice1 = new Choice(201, "Go left");
-    Choice* choice2 = new Choice(202, "Go right");
+    StoryNode* current = start;
 
-    choice1->setNextNode(node2);
-    choice2->setNextNode(node3);
+    while (current) {
+        current->display();
 
-    // Add choices to starting node
-    node1->addChoice(choice1);
-    node1->addChoice(choice2);
-
-    // Save a version of the story
-    Version* version1 = story->createVersion("Initial Version");
-
-    // Print story information
-    std::cout << "Author: " << author->getName() << std::endl;
-    std::cout << "Story: " << story->getTitle() << std::endl;
-    std::cout << "\nStory Nodes and Choices:" << std::endl;
-
-    // Dynamically list all nodes and their choices
-    for (auto node : story->getNodes()) {
-        std::cout << "- Node: " << node->getTitle() << "\n  Narrative: " << node->getNarrativeText() << std::endl;
-        if (!node->getChoices().empty()) {
-            std::cout << "  Choices:" << std::endl;
-            for (auto choice : node->getChoices()) {
-                std::cout << "   - " << choice->getDescription()
-                    << " -> " << choice->getNextNode()->getTitle() << std::endl;
-            }
+        if (current->getChoices().empty()) {
+            std::cout << "\n--- THE END ---\n";
+            break;
         }
-        std::cout << std::endl;
+
+        std::cout << "\nEnter choice number: ";
+        int choice;
+        std::cin >> choice;
+
+        StoryNode* next = current->getNextNode(choice);
+        if (!next) {
+            std::cout << "Invalid choice. Try again.\n";
+            continue;
+        }
+
+        current = next;
     }
 
-    // Demonstrate restoring a story version
-    Story* restored = version1->restore();
-    std::cout << "Restored Story: " << restored->getTitle()
-        << " (Version: " << version1->getLabel() << ")" << std::endl;
-
-    // Pause before exit
     std::cout << "\nPress Enter to exit...";
+    std::cin.ignore();
     std::cin.get();
-
-    // Clean up dynamic memory
-    delete version1;
-    delete choice1;
-    delete choice2;
-    delete node1;
-    delete node2;
-    delete node3;
-    delete story;
-    delete author;
 
     return 0;
 }

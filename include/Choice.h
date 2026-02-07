@@ -7,18 +7,13 @@ class StoryNode;
 class Choice {
 private:
     int choiceId;
-    std::string description;
+    std::string text;
     StoryNode* nextNode;
 
 public:
-    // Constructor
-    Choice(int id, const std::string& desc);
+    Choice(int id, const std::string& text, StoryNode* next);
 
-    // Getters/Setters
     int getChoiceId() const;
-    std::string getDescription() const;
-    void setDescription(const std::string& desc);
-
-    void setNextNode(StoryNode* node);
+    std::string getText() const;
     StoryNode* getNextNode() const;
 };

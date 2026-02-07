@@ -1,13 +1,16 @@
 #include "Choice.h"
-#include "StoryNode.h"
 
-Choice::Choice(int id, const std::string& desc)
-    : choiceId(id), description(desc), nextNode(nullptr) {
+Choice::Choice(int id, const std::string& text, StoryNode* next)
+    : choiceId(id), text(text), nextNode(next) {}
+
+int Choice::getChoiceId() const {
+    return choiceId;
 }
 
-int Choice::getChoiceId() const { return choiceId; }
-std::string Choice::getDescription() const { return description; }
-void Choice::setDescription(const std::string& desc) { description = desc; }
+std::string Choice::getText() const {
+    return text;
+}
 
-void Choice::setNextNode(StoryNode* node) { nextNode = node; }
-StoryNode* Choice::getNextNode() const { return nextNode; }
+StoryNode* Choice::getNextNode() const {
+    return nextNode;
+}
