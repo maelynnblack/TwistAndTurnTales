@@ -1,0 +1,24 @@
+﻿TwistAndTurnTales/
+│
+├── include/ # Header files (.h)
+│ ├── Author.h
+│ ├── Story.h
+│ ├── StoryNode.h
+│ ├── Choice.h
+│ └── Version.h
+|
+├── tests/ # Test files (.cpp)
+│ ├── test_author.cpp
+│ ├── test_story.cpp
+│ ├── test_storynode.cpp
+│ ├── test_choice.cpp
+│ └── test_version.cpp
+|
+├── src/ # Source files (.cpp)
+│ ├── Author.cpp
+│ ├── Story.cpp
+│ ├── StoryNode.cpp
+│ ├── Choice.cpp
+│ └── Version.cpp
+│
+└── main.cpp # Driver application
